@@ -44,6 +44,7 @@ public class LdapAvatarService implements AvatarService {
 				   .stream()
 				   .map(LdapUser::getEmail)
 				   .filter(Objects::nonNull)
+				   .distinct()
 				   .collect(Collectors.toMap(email -> md5(email), email -> email));
 	}
 	
