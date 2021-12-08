@@ -11,7 +11,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.springframework.web.servlet.NoHandlerFoundException;
 
 import de.chovy.ldavatar.avatar.PlaceholderFactory;
 import de.chovy.ldavatar.placeholders.Placeholders;
@@ -32,14 +31,14 @@ class LdapAvatarServiceTest {
 	private LdapUser user;
 	
 	@BeforeEach
-	void setUp() throws NoHandlerFoundException {
+	void setUp() {
 		MockitoAnnotations.openMocks(this);
 		pf = Placeholders.AWESOME.getFactory();
 		service = new LdapAvatarService(repo);
 	}
 
 	@Test
-	void by_username_found_with_avatar() throws NoHandlerFoundException {
+	void by_username_found_with_avatar() {
 		when(repo.findByUsername("test")).thenReturn(Optional.of(user));
 		when(user.getAvatar()).thenReturn(Optional.of(TEST_BYTES));
 		
@@ -49,7 +48,7 @@ class LdapAvatarServiceTest {
 	}
 	
 	@Test
-	void by_username_found_without_avatar() throws NoHandlerFoundException {
+	void by_username_found_without_avatar() {
 		when(repo.findByUsername("test")).thenReturn(Optional.of(user));
 		when(user.getAvatar()).thenReturn(Optional.empty());
 		
@@ -59,7 +58,7 @@ class LdapAvatarServiceTest {
 	}
 	
 	@Test
-	void admin_found_without_avatar() throws NoHandlerFoundException {
+	void admin_found_without_avatar() {
 		when(repo.findByUsername("admin")).thenReturn(Optional.of(user));
 		when(user.getAvatar()).thenReturn(Optional.empty());
 		when(user.isAdmin()).thenReturn(true);
@@ -70,7 +69,7 @@ class LdapAvatarServiceTest {
 	}
 	
 	@Test
-	void by_username_not_found() throws NoHandlerFoundException {
+	void by_username_not_found() {
 		when(repo.findByUsername("test")).thenReturn(Optional.empty());
 		
 		byte[] result = service.getAvatarByUsername("test", pf);
@@ -79,7 +78,7 @@ class LdapAvatarServiceTest {
 	}
 	
 	@Test
-	void by_email_found_with_avatar() throws NoHandlerFoundException {
+	void by_email_found_with_avatar() {
 		when(repo.findByEmail("test")).thenReturn(Optional.of(user));
 		when(user.getAvatar()).thenReturn(Optional.of(TEST_BYTES));
 		
@@ -89,7 +88,7 @@ class LdapAvatarServiceTest {
 	}
 	
 	@Test
-	void by_email_found_without_avatar() throws NoHandlerFoundException {
+	void by_email_found_without_avatar() {
 		when(repo.findByEmail("test")).thenReturn(Optional.of(user));
 		when(user.getAvatar()).thenReturn(Optional.empty());
 		
@@ -99,7 +98,7 @@ class LdapAvatarServiceTest {
 	}
 	
 	@Test
-	void by_email_not_found() throws NoHandlerFoundException {
+	void by_email_not_found() {
 		when(repo.findByEmail("test")).thenReturn(Optional.empty());
 		
 		byte[] result = service.getAvatarByEmail("test", pf);
