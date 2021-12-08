@@ -94,4 +94,9 @@ public class DummyAvatarService implements AvatarService {
 			return username.toLowerCase().startsWith("adm");
 		}
 	}
+
+	@Override
+	public byte[] getAvatarByHash(final String hash, final PlaceholderFactory placeholderFactory) {
+		return placeholderFactory.getPlaceholderAvatar(Optional.of(dummyUserByUsername(hash)));
+	}
 }
