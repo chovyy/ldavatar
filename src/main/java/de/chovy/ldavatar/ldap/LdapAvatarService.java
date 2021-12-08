@@ -45,7 +45,7 @@ public class LdapAvatarService implements AvatarService {
 	}
 	
 	private String md5(final String text) {
-		return DigestUtils.md5Hex(text);
+		return DigestUtils.md5Hex(text.trim().toLowerCase());
 	}
 
 	/**
