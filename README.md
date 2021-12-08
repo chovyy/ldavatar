@@ -1,6 +1,6 @@
 # ldavatar
 
-Gravatar-compatible service that provides avatar images from an LDAP backend, e.g. user photos from an Active Directory.
+Service that provides avatar images from an LDAP backend, e.g. user photos from an Active Directory.
 
 Build with [Java](https://www.oracle.com/java/), [Spring Boot](https://spring.io/projects/spring-boot) and [Maven](https://maven.apache.org/).
 
