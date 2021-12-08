@@ -1,6 +1,7 @@
 package de.chovy.ldavatar.ldap;
 
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -33,14 +34,16 @@ public class LdapAvatarService implements AvatarService {
 	 
 	@PostConstruct
 	void init() {
-		LOG.debug("Loaded. Avatars will be fetched via LDAP.");
+		LOG.info("Loaded. Avatars will be fetched via LDAP.");
 		hashes2email = createHashes();
+		LOG.info("Hashed %d email adresses.");
 	}
 
 	private Map<String, String> createHashes() {
 		return repo.findAll()
 				   .stream()
 				   .map(LdapUser::getEmail)
+				   .filter(Objects::nonNull)
 				   .collect(Collectors.toMap(email -> md5(email), email -> email));
 	}
 	
