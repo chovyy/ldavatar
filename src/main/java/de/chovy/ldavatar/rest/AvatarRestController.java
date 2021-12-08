@@ -85,7 +85,13 @@ public class AvatarRestController {
 	public ResponseEntity<byte[]> getAvatarByHash(@PathVariable Optional<String> hash, 
 			@RequestParam final Optional<String> d, @RequestParam final Optional<String> f, 
 			@RequestParam final Optional<String> s, @RequestParam final Optional<String> r)  {
-		final PlaceholderFactory placeholderFactory = getPlaceholderFactory(d);
+		PlaceholderFactory placeholderFactory;
+		try {
+			placeholderFactory = getPlaceholderFactory(d);
+		}
+		catch (IllegalArgumentException e) {
+			placeholderFactory = Placeholders.AWESOME.getFactory();
+		}
 		if (f.isPresent() && "y".equals(f.get())) {
 			hash = Optional.empty();
 		}
@@ -101,7 +107,8 @@ public class AvatarRestController {
 				return placeholders.getFactory();
 			}
 			catch (IllegalArgumentException e) {
-				throw new IllegalArgumentException("No valid value for parameter d given, expected one of: " + Placeholders.joinNames(), e);
+				return Placeholders.AWESOME.getFactory();
+				//throw new IllegalArgumentException("No valid value for parameter d given, expected one of: " + Placeholders.joinNames(), e);
 			}
 		}
 		return DEFAULT_PLACEHOLDERS.getFactory();
