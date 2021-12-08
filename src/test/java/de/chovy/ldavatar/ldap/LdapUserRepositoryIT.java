@@ -14,7 +14,7 @@ import org.springframework.boot.test.autoconfigure.data.ldap.DataLdapTest;
 import de.chovy.ldavatar.avatar.User;
 
 @DataLdapTest
-class LdapUserRepositoryTest {
+class LdapUserRepositoryIT {
 	
 	@Autowired
 	private LdapUserRepository repo;
