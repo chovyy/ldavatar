@@ -37,7 +37,7 @@ class AvatarRestControllerTest {
 	private AvatarRestController rest;
 	
 	@BeforeEach
-	void setUp() throws NoHandlerFoundException {
+	void setUp() {
 		MockitoAnnotations.openMocks(this);
 		when(user.getAvatar()).thenReturn(Optional.of(USERNAME_BYTES));
 		when(user.isAdmin()).thenReturn(false);
