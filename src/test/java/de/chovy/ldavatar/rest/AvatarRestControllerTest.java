@@ -13,7 +13,6 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.servlet.NoHandlerFoundException;
 
 import de.chovy.ldavatar.avatar.AvatarService;
 import de.chovy.ldavatar.ldap.LdapAvatarService;
@@ -56,75 +55,75 @@ class AvatarRestControllerTest {
 	}
 	
 	@Test
-	void no_userParam() throws NoHandlerFoundException {
+	void no_userParam() {
 		ResponseEntity<byte[]> result = rest.getAvatar(Optional.empty(), Optional.empty());
 		assertEquals(HttpStatus.OK, result.getStatusCode());
 		assertTrue(StaticImage.AWESOME_USER.is(result.getBody()));
 	}
 	
 	@Test
-	void username_userFound() throws NoHandlerFoundException {
+	void username_userFound() {
 		ResponseEntity<byte[]> result = rest.getAvatar(Optional.of("USERPOST"), Optional.empty());
 		assertEquals(HttpStatus.OK, result.getStatusCode());
 		assertEquals(USERNAME_BYTES, result.getBody());
 	}
 	
 	@Test
-	void username_noUserFound() throws NoHandlerFoundException {
+	void username_noUserFound() {
 		ResponseEntity<byte[]> result = rest.getAvatar(Optional.of("noUserpost"), Optional.empty());
 		assertEquals(HttpStatus.OK, result.getStatusCode());
 		assertTrue(StaticImage.AWESOME_USER.is(result.getBody()));
 	}
 	
 	@Test
-	void username_adminFoundNoAvatar() throws NoHandlerFoundException {
+	void username_adminFoundNoAvatar() {
 		ResponseEntity<byte[]> result = rest.getAvatar(Optional.of("ADMIN"), Optional.empty());
 		assertEquals(HttpStatus.OK, result.getStatusCode());
 		assertTrue(StaticImage.AWESOME_ADMIN.is(result.getBody()));
 	}
 	
 	@Test
-	void email_userFound() throws NoHandlerFoundException {
+	void email_userFound() {
 		ResponseEntity<byte[]> result = rest.getAvatar(Optional.of("Email@test.dePOST"), Optional.empty());
 		assertEquals(HttpStatus.OK, result.getStatusCode());
 		assertEquals(EMAIL_BYTES, result.getBody());
 	}
 	
 	@Test
-	void email_noUserFound() throws NoHandlerFoundException {
+	void email_noUserFound() {
 		ResponseEntity<byte[]> result = rest.getAvatar(Optional.of("No_Email@test.de"), Optional.empty());
 		assertEquals(HttpStatus.OK, result.getStatusCode());
 		assertTrue(StaticImage.AWESOME_USER.is(result.getBody()));
 	}
 	
 	@Test
-	void noUserFound_awesomePlaceholder() throws NoHandlerFoundException {
+	void noUserFound_awesomePlaceholder() {
 		ResponseEntity<byte[]> result = rest.getAvatar(Optional.of("noUserpost"), Optional.of("awesome"));
 		assertEquals(HttpStatus.OK, result.getStatusCode());
 		assertTrue(StaticImage.AWESOME_USER.is(result.getBody()));
 	}
 	
 	@Test
-	void noUserFound_blankPlaceholder() throws NoHandlerFoundException {
+	void noUserFound_blankPlaceholder() {
 		ResponseEntity<byte[]> result = rest.getAvatar(Optional.of("noUserpost"), Optional.of("blank"));
 		assertEquals(HttpStatus.OK, result.getStatusCode());
 		assertTrue(StaticImage.BLANK.is(result.getBody()));
 	}
 	
 	@Test
-	void noUserFound_outlookPlaceholder() throws NoHandlerFoundException {
+	void noUserFound_outlookPlaceholder() {
 		ResponseEntity<byte[]> result = rest.getAvatar(Optional.of("noUserpost"), Optional.of("outlook"));
 		assertEquals(HttpStatus.OK, result.getStatusCode());
 		assertTrue(StaticImage.OUTLOOK.is(result.getBody()));
 	}
 	
 	@Test
-	void noUserFound_noPlaceholder() throws NoHandlerFoundException {
+	void noUserFound_noPlaceholder() {
 		assertThrows(RuntimeException.class, () -> rest.getAvatar(Optional.of("noUserpost"), Optional.of("none")));
 	}
 	
 	@Test
-	void illegalPlaceholderParameter() throws NoHandlerFoundException {
+	void illegalPlaceholderParameter() {
 		assertThrows(IllegalArgumentException.class, () -> rest.getAvatar(Optional.of("noUserpost"), Optional.of("xxx")));
 	}
 }
