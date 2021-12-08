@@ -10,7 +10,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.springframework.web.servlet.NoHandlerFoundException;
 
 import de.chovy.ldavatar.avatar.PlaceholderFactory;
 
@@ -24,35 +23,35 @@ class DummyAvatarServiceTest {
 	private PlaceholderFactory pf;
 
 	@BeforeEach
-	void setUp() throws NoHandlerFoundException {
+	void setUp() {
 		MockitoAnnotations.openMocks(this);
 		when(pf.getPlaceholderAvatar(any())).thenReturn(PLACEHOLDER_BYTES);
 		service = new DummyAvatarService();
 	}
 
 	@Test
-	void by_username_even_length() throws NoHandlerFoundException {
+	void by_username_even_length() {
 		byte[] result = service.getAvatarByUsername("test", pf);
 		assertNotNull(result);
 		assertTrue(StaticImage.DUMMY.is(result));
 	}
 	
 	@Test
-	void by_username_odd_length() throws NoHandlerFoundException {
+	void by_username_odd_length() {
 		byte[] result = service.getAvatarByUsername("test0", pf);
 		assertNotNull(result);
 		assertEquals(PLACEHOLDER_BYTES, result);
 	}
 	
 	@Test
-	void by_email_even_length() throws NoHandlerFoundException {
+	void by_email_even_length() {
 		byte[] result = service.getAvatarByEmail("test@test.de", pf);
 		assertNotNull(result);
 		assertTrue(StaticImage.DUMMY.is(result));
 	}
 	
 	@Test
-	void by_email_odd_length() throws NoHandlerFoundException {
+	void by_email_odd_length() {
 		byte[] result = service.getAvatarByEmail("test0@test.de", pf);
 		assertNotNull(result);
 		assertEquals(PLACEHOLDER_BYTES, result);
