@@ -10,10 +10,12 @@ import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.ldap.DataLdapTest;
+import org.springframework.context.annotation.Import;
 
 import de.chovy.ldavatar.avatar.User;
 
 @DataLdapTest
+@Import(LdapConfiguration.class)
 class LdapUserRepositoryIT {
 	
 	@Autowired
