@@ -36,7 +36,7 @@ public class LdapAvatarService implements AvatarService {
 	void init() {
 		LOG.info("Loaded. Avatars will be fetched via LDAP.");
 		hashes2email = createHashes();
-		LOG.info("Hashed %d email adresses.");
+		LOG.info("Hashed {} email adresses.", hashes2email.size());
 	}
 
 	private Map<String, String> createHashes() {
