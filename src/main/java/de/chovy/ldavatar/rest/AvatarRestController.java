@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -47,7 +48,7 @@ public class AvatarRestController {
 	}
 
 	/**
-	 * The one and only service end point. Delivers the avatars.
+	 * Delivers the avatars by username or email as query parameter {@code user}.
 	 * 
 	 * @param user Optional containing username or email address of the user for whom the avatar is requested. 
 	 * @param d Name of the placeholder option defined in {@link Placeholders}
@@ -59,9 +60,28 @@ public class AvatarRestController {
 	@GetMapping("/avatar.jpg")
 	@Cacheable(CacheConfiguration.CACHE_NAME)
 	@SuppressWarnings("PMD.ShortVariable")
-	public ResponseEntity<byte[]> getAvatar(@RequestParam final Optional<String> user, @RequestParam final Optional<String> d)  {
+	public ResponseEntity<byte[]> getAvatarByUser(@RequestParam final Optional<String> user, @RequestParam final Optional<String> d)  {
 		final PlaceholderFactory placeholderFactory = getPlaceholderFactory(d);
-		final byte[] avatar = findAvatar(user, placeholderFactory);
+		final byte[] avatar = findAvatarByUser(user, placeholderFactory);
+		return new ResponseEntity<>(avatar, buildHeaders(), HttpStatus.OK);
+	}
+	
+	/**
+	 * Gravatar-compatible interface. Delivers the avatars by email hash passed as path variable.
+	 * 
+	 * @param hash Optional containing Gravatar-compatible MD5 hash of the email address of the user for whom the avatar is requested. 
+	 * @param d Name of the placeholder option defined in {@link Placeholders}
+	 * 
+	 * @return {@link ResponseEntity} containing the requested avatar as jpeg image if {@code user} is not empty 
+	 * and an avatar is found for the given username or email address. Otherwise, the placeholder defined by {@code d}
+	 * is returned, or if {@code d == 'none'} a 404 error.
+	 */
+	@GetMapping("/gravatar/{hash}")
+	@Cacheable(CacheConfiguration.CACHE_NAME)
+	@SuppressWarnings("PMD.ShortVariable")
+	public ResponseEntity<byte[]> getAvatarByHash(@PathVariable final Optional<String> hash, @RequestParam final Optional<String> d)  {
+		final PlaceholderFactory placeholderFactory = getPlaceholderFactory(d);
+		final byte[] avatar = findAvatarByHash(hash, placeholderFactory);
 		return new ResponseEntity<>(avatar, buildHeaders(), HttpStatus.OK);
 	}
 	
@@ -79,7 +99,7 @@ public class AvatarRestController {
 		return DEFAULT_PLACEHOLDERS.getFactory();
 	}
 	 
-	private byte[] findAvatar(final Optional<String> userParam, final PlaceholderFactory placeholderFactory)  {
+	private byte[] findAvatarByUser(final Optional<String> userParam, final PlaceholderFactory placeholderFactory)  {
 		LOG.debug("user: " + userParam.orElse(""));
 		if (userParam.isPresent()) {
 			final String user = normalizeUserParam(userParam.get());
@@ -92,6 +112,14 @@ public class AvatarRestController {
 				LOG.debug("...is email.");
 				return avatarService.getAvatarByEmail(user, placeholderFactory);
 			}
+		}
+		return placeholderFactory.getPlaceholderAvatar();
+	}
+	
+	private byte[] findAvatarByHash(final Optional<String> hashParam, final PlaceholderFactory placeholderFactory)  {
+		LOG.debug("hash: " + hashParam.orElse(""));
+		if (hashParam.isPresent()) {
+			return avatarService.getAvatarByHash(hashParam.get(), placeholderFactory);
 		}
 		return placeholderFactory.getPlaceholderAvatar();
 	}
