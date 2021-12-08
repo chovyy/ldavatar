@@ -70,7 +70,10 @@ public class AvatarRestController {
 	 * Gravatar-compatible interface. Delivers the avatars by email hash passed as path variable.
 	 * 
 	 * @param hash Optional containing Gravatar-compatible MD5 hash of the email address of the user for whom the avatar is requested. 
-	 * @param d Name of the placeholder option defined in {@link Placeholders}
+	 * @param d Optional Default. Name of the placeholder option defined in {@link Placeholders}
+	 * @param f Optional Force default, if {@code "y"}, placeholder image will be return
+	 * @param s Optional Size, currently ignored
+	 * @param r Optional Rating, ignored
 	 * 
 	 * @return {@link ResponseEntity} containing the requested avatar as jpeg image if {@code user} is not empty 
 	 * and an avatar is found for the given username or email address. Otherwise, the placeholder defined by {@code d}
@@ -79,8 +82,13 @@ public class AvatarRestController {
 	@GetMapping("/gravatar/{hash}")
 	@Cacheable(CacheConfiguration.CACHE_NAME)
 	@SuppressWarnings("PMD.ShortVariable")
-	public ResponseEntity<byte[]> getAvatarByHash(@PathVariable final Optional<String> hash, @RequestParam final Optional<String> d)  {
+	public ResponseEntity<byte[]> getAvatarByHash(@PathVariable Optional<String> hash, 
+			@RequestParam final Optional<String> d, @RequestParam final Optional<String> f, 
+			@RequestParam final Optional<String> s, @RequestParam final Optional<String> r)  {
 		final PlaceholderFactory placeholderFactory = getPlaceholderFactory(d);
+		if (f.isPresent() && "y".equals(f.get())) {
+			hash = Optional.empty();
+		}
 		final byte[] avatar = findAvatarByHash(hash, placeholderFactory);
 		return new ResponseEntity<>(avatar, buildHeaders(), HttpStatus.OK);
 	}
