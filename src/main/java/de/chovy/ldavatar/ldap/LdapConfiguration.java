@@ -1,5 +1,7 @@
 package de.chovy.ldavatar.ldap;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -19,6 +21,8 @@ import org.springframework.ldap.core.support.LdapContextSource;
 @Configuration
 @EnableLdapRepositories
 class LdapConfiguration {
+	
+	private static final Logger LOG = LoggerFactory.getLogger(LdapConfiguration.class);
 	
 	/**
 	 * URL of the LDAP server
@@ -50,9 +54,13 @@ class LdapConfiguration {
 	@Bean
 	public LdapContextSource contextSource() {
 	    final LdapContextSource contextSource = new LdapContextSource();
+	    LOG.debug("LDAP URL: " + url);
 	    contextSource.setUrl(url);
+	    LOG.debug("LDAP Base: " + base);
 	    contextSource.setBase(base);
+	    LOG.debug("LDAP UserDn: " + userDn);
 	    contextSource.setUserDn(userDn);
+	    LOG.debug("LDAP Password: ***");
 	    contextSource.setPassword(password);
 	    
 	    return contextSource;
