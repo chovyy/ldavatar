@@ -25,4 +25,14 @@ public interface AvatarService {
 	 * @return The avatar image of the given user if the user was found and has an avatar, otherwise the placeholder avatar taken from the given {@link PlaceholderFactory}
 	 */
 	public byte[] getAvatarByEmail(String email, PlaceholderFactory placeholderFactory);
+	
+	
+	/**
+	 * Delivers the avatar for a given user with a given email hash.
+	 * 
+	 * @param hash The md5 hash of the email address of the user for whom the avatar is wanted
+	 * @param placeholderFactory The {@link PlaceholderFactory} from which the placeholder avatar will be taken if no user avatar is found
+	 * @return The avatar image of the given user if the user was found and has an avatar, otherwise the placeholder avatar taken from the given {@link PlaceholderFactory}
+	 */
+	public byte[] getAvatarByHash(String hash, PlaceholderFactory placeholderFactory);
 }

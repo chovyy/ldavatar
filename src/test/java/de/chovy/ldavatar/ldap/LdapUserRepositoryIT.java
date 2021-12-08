@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
@@ -27,7 +28,7 @@ class LdapUserRepositoryIT {
 	}
 	
 	@Test
-	void getUserByUsername_tesla() {
+	void userByUsername_tesla() {
 		Optional<LdapUser> result = repo.findByUsername("tesla");
 		assertTrue(result.isPresent());
 		User user = result.get();
@@ -38,7 +39,7 @@ class LdapUserRepositoryIT {
 	}
 	
 	@Test
-	void getUserByEmail_tesla() {
+	void userByEmail_tesla() {
 		Optional<LdapUser> result = repo.findByEmail("tesla@ldap.forumsys.com");
 		assertTrue(result.isPresent());
 		User user = result.get();
@@ -46,5 +47,13 @@ class LdapUserRepositoryIT {
 		assertEquals("tesla@ldap.forumsys.com", user.getEmail());
 		assertFalse(user.isAdmin());
 		assertTrue(user.getAvatar().isEmpty());
+	}
+	
+	@Test
+	void all() {
+		List<LdapUser> all = repo.findAll();
+		assertNotNull(all);
+		assertFalse(all.isEmpty());
+		all.forEach(u -> System.out.println(u.getEmail()));
 	}
 }

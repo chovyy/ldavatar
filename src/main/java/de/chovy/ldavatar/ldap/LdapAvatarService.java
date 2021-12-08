@@ -1,9 +1,12 @@
 package de.chovy.ldavatar.ldap;
 
+import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
 
+import org.apache.commons.codec.digest.DigestUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,9 +29,23 @@ public class LdapAvatarService implements AvatarService {
 
 	private final LdapUserRepository repo;
 	
+	private Map<String, String> hashes2email; 
+	 
 	@PostConstruct
 	void init() {
 		LOG.debug("Loaded. Avatars will be fetched via LDAP.");
+		hashes2email = createHashes();
+	}
+
+	private Map<String, String> createHashes() {
+		return repo.findAll()
+				   .stream()
+				   .map(LdapUser::getEmail)
+				   .collect(Collectors.toMap(email -> md5(email), email -> email));
+	}
+	
+	private String md5(final String text) {
+		return DigestUtils.md5Hex(text);
 	}
 
 	/**
@@ -48,6 +65,15 @@ public class LdapAvatarService implements AvatarService {
 	@Override
 	public byte[] getAvatarByEmail(final String email, final PlaceholderFactory placeholderFactory) {
 		final Optional<LdapUser> userOpt = repo.findByEmail(email);
+		return getAvatarForUser(userOpt, placeholderFactory);
+	}
+
+	@Override
+	public byte[] getAvatarByHash(final String hash, final PlaceholderFactory placeholderFactory) {
+		Optional<LdapUser> userOpt = Optional.empty();
+		if (hashes2email.containsKey(hash)) {
+			userOpt = repo.findByEmail(hashes2email.get(hash));
+		}
 		return getAvatarForUser(userOpt, placeholderFactory);
 	}
 	
