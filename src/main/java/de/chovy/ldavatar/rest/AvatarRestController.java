@@ -42,6 +42,7 @@ public class AvatarRestController {
 			@Value("${de.chovy.ldavatar.rest.username.remove.suffix:}") final String removeSuffix,
 			final AvatarService avatarService) {
 		this.removeSuffix = removeSuffix.toLowerCase();
+		LOG.debug("Remove suffix: " + this.removeSuffix);
 		this.avatarService = avatarService;
 	}
 
