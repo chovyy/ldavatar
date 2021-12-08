@@ -107,8 +107,7 @@ public class AvatarRestController {
 				return placeholders.getFactory();
 			}
 			catch (IllegalArgumentException e) {
-				return Placeholders.AWESOME.getFactory();
-				//throw new IllegalArgumentException("No valid value for parameter d given, expected one of: " + Placeholders.joinNames(), e);
+				throw new IllegalArgumentException("No valid value for parameter d given, expected one of: " + Placeholders.joinNames(), e);
 			}
 		}
 		return DEFAULT_PLACEHOLDERS.getFactory();
