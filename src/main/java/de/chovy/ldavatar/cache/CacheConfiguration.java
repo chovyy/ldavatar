@@ -47,13 +47,13 @@ public class CacheConfiguration {
 	/**
 	 * Time in seconds for which the responses of the Ldavatar webservice are cached
 	 */
-	@Value("${'de.chovy.ldavatar.cache.avatars.expire.seconds:10}")
+	@Value("${de.chovy.ldavatar.cache.avatars.expire.seconds:10}")
 	private int durationAvatars;
 	
 	/**
 	 * Time in minutes for which the email hashes are cached
 	 */
-	@Value("${'de.chovy.ldavatar.cache.hashes.expire.minutes:60}")
+	@Value("${de.chovy.ldavatar.cache.hashes.expire.minutes:60}")
 	private int durationHashes;
 	
 	/**
