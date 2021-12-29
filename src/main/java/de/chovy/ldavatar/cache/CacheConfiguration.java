@@ -33,7 +33,7 @@ public class CacheConfiguration {
 	/**
 	 * Time in seconds for which the responses of the Ldavatar webservice are cached
 	 */
-	@Value("${'de.chovy.ldavatar.cache.expire.seconds:10}")
+	@Value("${'de.chovy.ldavatar.cache.avatars.expire.seconds:10}")
 	private long duration;
 	
 	/**
