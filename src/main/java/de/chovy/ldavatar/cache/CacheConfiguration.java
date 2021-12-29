@@ -8,6 +8,7 @@ import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.cache.caffeine.CaffeineCacheManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 
 import com.github.benmanes.caffeine.cache.Caffeine;
 
@@ -35,6 +36,11 @@ public class CacheConfiguration {
 	 */
 	public static final String HASHES_CACHE = "hashes";
 	
+	/**
+	 * Name of the email hashes cache
+	 */
+	public static final String HASHES_CACHE_MANAGER = "hashesCacheManager";
+	
 	private static final TimeUnit DURATION_UNIT_AVATARS = TimeUnit.SECONDS;
 	private static final TimeUnit DURATION_UNIT_HASHES = TimeUnit.MINUTES;
 
@@ -54,6 +60,7 @@ public class CacheConfiguration {
 	 * Configures the {@link CacheManager} for avatars
 	 */
 	@Bean
+	@Primary
 	CacheManager cacheManager() {
 		final CaffeineCacheManager cacheManager = new CaffeineCacheManager(AVATAR_CACHE);
 		cacheManager.setCaffeine(caffeine(durationAvatars, DURATION_UNIT_AVATARS));

@@ -1,15 +1,8 @@
 package de.chovy.ldavatar.ldap;
 
 import java.util.Map;
-import java.util.Objects;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
-import javax.annotation.PostConstruct;
-
-import org.apache.commons.codec.digest.DigestUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
@@ -26,38 +19,17 @@ import de.chovy.ldavatar.avatar.PlaceholderFactory;
 @Profile("default")
 public class LdapAvatarService implements AvatarService {
 	
-	private static final Logger LOG = LoggerFactory.getLogger(LdapAvatarService.class);
-
 	private final LdapUserRepository repo;
-	
-	private Map<String, String> hashes2email; 
+	private final LdapEmailHashService hashService;
 	 
 	/**
 	 * @param repo The repository that delivers user information from the LDAP connection.
+	 * @param hashService The service which calculates the email hashes
 	 */
 	@Autowired
-	public LdapAvatarService(final LdapUserRepository repo) {
+	public LdapAvatarService(final LdapUserRepository repo, final LdapEmailHashService hashService) {
 		this.repo = repo;
-	}
-
-	@PostConstruct
-	void init() {
-		LOG.info("Loaded. Avatars will be fetched via LDAP.");
-		hashes2email = createHashes();
-		LOG.info("Hashed {} email adresses.", hashes2email.size());
-	}
-
-	private Map<String, String> createHashes() {
-		return repo.findAll()
-				   .stream()
-				   .map(LdapUser::getEmail)
-				   .filter(Objects::nonNull)
-				   .distinct()
-				   .collect(Collectors.toMap(email -> md5(email), email -> email));
-	}
-	
-	private String md5(final String text) {
-		return DigestUtils.md5Hex(text.trim().toLowerCase());
+		this.hashService = hashService;
 	}
 
 	@Override
@@ -75,6 +47,7 @@ public class LdapAvatarService implements AvatarService {
 	@Override
 	public byte[] getAvatarByHash(final String hash, final PlaceholderFactory placeholderFactory) {
 		Optional<LdapUser> userOpt = Optional.empty();
+		final Map<String, String> hashes2email = hashService.getHashes2EmailMap();
 		if (hashes2email.containsKey(hash)) {
 			userOpt = repo.findByEmail(hashes2email.get(hash));
 		}
