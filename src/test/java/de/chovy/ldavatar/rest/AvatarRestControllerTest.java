@@ -50,7 +50,7 @@ class AvatarRestControllerTest {
 		when(repo.findByEmail("email@test.de")).thenReturn(Optional.of(emailUser));
 		when(repo.findByEmail("no_email@test.de")).thenReturn(Optional.empty());
 		
-		avatarService = new LdapAvatarService(repo);
+		avatarService = new LdapAvatarService(repo, null);
 		rest = new AvatarRestController(REMOVE_SUFFIX, avatarService);
 	}
 	

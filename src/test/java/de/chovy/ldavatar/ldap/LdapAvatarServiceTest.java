@@ -34,7 +34,7 @@ class LdapAvatarServiceTest {
 	void setUp() {
 		MockitoAnnotations.openMocks(this);
 		pf = Placeholders.AWESOME.getFactory();
-		service = new LdapAvatarService(repo);
+		service = new LdapAvatarService(repo, null);
 	}
 
 	@Test
