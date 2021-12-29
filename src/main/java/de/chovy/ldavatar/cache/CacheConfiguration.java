@@ -34,7 +34,13 @@ public class CacheConfiguration {
 	 * Time in seconds for which the responses of the Ldavatar webservice are cached
 	 */
 	@Value("${'de.chovy.ldavatar.cache.avatars.expire.seconds:10}")
-	private long duration;
+	private long durationAvatars;
+	
+	/**
+	 * Time in minutes for which the email hashes are cached
+	 */
+	@Value("${'de.chovy.ldavatar.cache.hashes.expire.minutes:60}")
+	private long durationHashes;
 	
 	/**
 	 * Configures the {@link CacheManager}.
@@ -47,6 +53,6 @@ public class CacheConfiguration {
 	}
 	
 	private Caffeine<Object,Object> caffeineCacheBuilder() {
-		return Caffeine.newBuilder().expireAfterWrite(duration, TimeUnit.SECONDS);
+		return Caffeine.newBuilder().expireAfterWrite(durationAvatars, TimeUnit.SECONDS);
 	}
 }
