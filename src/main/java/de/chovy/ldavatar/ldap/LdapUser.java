@@ -19,7 +19,7 @@ import de.chovy.ldavatar.avatar.User;
  * @author chovyy
  */
 @Entry(objectClasses = "person")
-public final class LdapUser implements User {
+public class LdapUser implements User {
    
 	@Id
     @SuppressWarnings({ "PMD.UnusedPrivateField", "PMD.ShortVariable" })
