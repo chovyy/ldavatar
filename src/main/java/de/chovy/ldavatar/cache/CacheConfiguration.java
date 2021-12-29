@@ -28,7 +28,7 @@ public class CacheConfiguration {
 	/**
 	 * Name of the avatar cache
 	 */
-	public static final String CACHE_NAME = "avatars";
+	public static final String AVATAR_CACHE = "avatars";
 
 	/**
 	 * Time in seconds for which the responses of the Ldavatar webservice are cached
@@ -41,7 +41,7 @@ public class CacheConfiguration {
 	 */
 	@Bean
 	CacheManager cacheManager() {
-		final CaffeineCacheManager cacheManager = new CaffeineCacheManager(CACHE_NAME);
+		final CaffeineCacheManager cacheManager = new CaffeineCacheManager(AVATAR_CACHE);
 		cacheManager.setCaffeine(caffeineCacheBuilder());
 		return cacheManager;
 	}
