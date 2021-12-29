@@ -20,14 +20,14 @@ import de.chovy.ldavatar.avatar.PlaceholderFactory;
 public class LdapAvatarService implements AvatarService {
 	
 	private final LdapUserRepository repo;
-	private final LdapEmailHashService hashService;
+	private final LdapEmailHashCache hashService;
 	 
 	/**
 	 * @param repo The repository that delivers user information from the LDAP connection.
 	 * @param hashService The service which calculates the email hashes
 	 */
 	@Autowired
-	public LdapAvatarService(final LdapUserRepository repo, final LdapEmailHashService hashService) {
+	public LdapAvatarService(final LdapUserRepository repo, final LdapEmailHashCache hashService) {
 		this.repo = repo;
 		this.hashService = hashService;
 	}

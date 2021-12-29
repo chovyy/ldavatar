@@ -18,9 +18,9 @@ import de.chovy.ldavatar.cache.CacheConfiguration;
  * @author chovyy
  */
 @Service
-class LdapEmailHashService {
+class LdapEmailHashCache {
 	
-	private static final Logger LOG = LoggerFactory.getLogger(LdapEmailHashService.class);
+	private static final Logger LOG = LoggerFactory.getLogger(LdapEmailHashCache.class);
 	
 	private final LdapUserRepository repo;
 
@@ -28,7 +28,7 @@ class LdapEmailHashService {
 	 * @param repo The repository that delivers user information from the LDAP connection.
 	 */
 	@Autowired
-	public LdapEmailHashService(final LdapUserRepository repo) {
+	public LdapEmailHashCache(final LdapUserRepository repo) {
 		this.repo = repo;
 	}
 
