@@ -32,6 +32,14 @@ public class LdapAvatarService implements AvatarService {
 	
 	private Map<String, String> hashes2email; 
 	 
+	/**
+	 * @param repo The repository that delivers user information from the LDAP connection.
+	 */
+	@Autowired
+	public LdapAvatarService(final LdapUserRepository repo) {
+		this.repo = repo;
+	}
+
 	@PostConstruct
 	void init() {
 		LOG.info("Loaded. Avatars will be fetched via LDAP.");
@@ -52,14 +60,6 @@ public class LdapAvatarService implements AvatarService {
 		return DigestUtils.md5Hex(text.trim().toLowerCase());
 	}
 
-	/**
-	 * @param repo The repository that delivers user information from the LDAP connection.
-	 */
-	@Autowired
-	public LdapAvatarService(final LdapUserRepository repo) {
-		this.repo = repo;
-	}
-	
 	@Override
 	public byte[] getAvatarByUsername(final String username, final PlaceholderFactory placeholderFactory) {
 		final Optional<LdapUser> userOpt = repo.findByUsername(username);
