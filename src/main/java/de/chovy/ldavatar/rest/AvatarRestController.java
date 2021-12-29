@@ -58,7 +58,7 @@ public class AvatarRestController {
 	 * is returned, or if {@code d == 'none'} a 404 error.
 	 */
 	@GetMapping("/avatar.jpg")
-	@Cacheable(CacheConfiguration.CACHE_NAME)
+	@Cacheable(CacheConfiguration.AVATAR_CACHE)
 	@SuppressWarnings("PMD.ShortVariable")
 	public ResponseEntity<byte[]> getAvatarByUser(@RequestParam final Optional<String> user, @RequestParam final Optional<String> d)  {
 		final PlaceholderFactory placeholderFactory = getPlaceholderFactory(d);
@@ -80,8 +80,8 @@ public class AvatarRestController {
 	 * is returned, or if {@code d == 'none'} a 404 error.
 	 */
 	@GetMapping("/gravatar/{hash}")
-	@Cacheable(CacheConfiguration.CACHE_NAME)
-	@SuppressWarnings("PMD.ShortVariable")
+	@Cacheable(CacheConfiguration.AVATAR_CACHE)
+	@SuppressWarnings({ "PMD.ShortVariable", "PMD.AvoidReassigningParameters", "PMD.AvoidLiteralsInIfCondition" })
 	public ResponseEntity<byte[]> getAvatarByHash(@PathVariable Optional<String> hash, 
 			@RequestParam final Optional<String> d, @RequestParam final Optional<String> f, 
 			@RequestParam final Optional<String> s, @RequestParam final Optional<String> r)  {

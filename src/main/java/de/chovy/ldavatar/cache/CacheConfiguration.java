@@ -8,6 +8,7 @@ import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.cache.caffeine.CaffeineCacheManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 
 import com.github.benmanes.caffeine.cache.Caffeine;
 
@@ -24,29 +25,59 @@ import com.github.benmanes.caffeine.cache.Caffeine;
 @Configuration
 @EnableCaching
 public class CacheConfiguration {
-	
+
 	/**
 	 * Name of the avatar cache
 	 */
-	public static final String CACHE_NAME = "avatars";
+	public static final String AVATAR_CACHE = "avatars";
+	
+	/**
+	 * Name of the email hashes cache
+	 */
+	public static final String HASHES_CACHE = "hashes";
+	
+	/**
+	 * Name of the email hashes cache
+	 */
+	public static final String HASHES_CACHE_MANAGER = "hashesCacheManager";
+	
+	private static final TimeUnit DURATION_UNIT_AVATARS = TimeUnit.SECONDS;
+	private static final TimeUnit DURATION_UNIT_HASHES = TimeUnit.MINUTES;
 
 	/**
 	 * Time in seconds for which the responses of the Ldavatar webservice are cached
 	 */
-	@Value("${'de.chovy.ldavatar.cache.expire.seconds:10}")
-	private long duration;
+	@Value("${de.chovy.ldavatar.cache.avatars.expire.seconds:10}")
+	private int durationAvatars;
 	
 	/**
-	 * Configures the {@link CacheManager}.
+	 * Time in minutes for which the email hashes are cached
+	 */
+	@Value("${de.chovy.ldavatar.cache.hashes.expire.minutes:60}")
+	private int durationHashes;
+	
+	/**
+	 * Configures the {@link CacheManager} for avatars
 	 */
 	@Bean
+	@Primary
 	CacheManager cacheManager() {
-		final CaffeineCacheManager cacheManager = new CaffeineCacheManager(CACHE_NAME);
-		cacheManager.setCaffeine(caffeineCacheBuilder());
+		final CaffeineCacheManager cacheManager = new CaffeineCacheManager(AVATAR_CACHE);
+		cacheManager.setCaffeine(caffeine(durationAvatars, DURATION_UNIT_AVATARS));
 		return cacheManager;
 	}
 	
-	private Caffeine<Object,Object> caffeineCacheBuilder() {
-		return Caffeine.newBuilder().expireAfterWrite(duration, TimeUnit.SECONDS);
+	/**
+	 * Configures the {@link CacheManager} for email hashes
+	 */
+	@Bean
+	CacheManager hashesCacheManager() {
+		final CaffeineCacheManager cacheManager = new CaffeineCacheManager(HASHES_CACHE);
+		cacheManager.setCaffeine(caffeine(durationHashes, DURATION_UNIT_HASHES));
+		return cacheManager;
+	}
+	
+	private Caffeine<Object,Object> caffeine(final int duration, final TimeUnit durationUnit) {
+		return Caffeine.newBuilder().expireAfterWrite(duration, durationUnit);
 	}
 }
